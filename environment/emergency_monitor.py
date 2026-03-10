@@ -1,18 +1,18 @@
-import random
+import datetime
+from simulation.emergency_cases import get_random_patient, get_random_severity
 
 class EmergencyMonitor:
 
     def detect_emergency(self):
+        patient = get_random_patient()
+        severity = get_random_severity()
+        detection_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        patients = ["Patient_A", "Patient_B", "Patient_C"]
+        print("\n" + "="*40)
+        print("!!! EMERGENCY ALERT DETECTED !!!")
+        print("="*40)
+        print(f"Time:     {detection_time}")
+        print(f"Patient:  {patient}")
+        print(f"Severity: {severity}\n")
 
-        severity_levels = ["Low", "Medium", "High"]
-
-        patient = random.choice(patients)
-        severity = random.choice(severity_levels)
-
-        print("\nEmergency Alert Detected")
-        print("Patient:", patient)
-        print("Severity:", severity)
-
-        return patient, severity
+        return patient, severity, detection_time

@@ -1,3 +1,6 @@
+import time
+import random
+
 from agents.emergency_agent import EmergencyAgent
 from agents.coordinator_agent import CoordinatorAgent
 from agents.doctor_agent import DoctorAgent
@@ -22,12 +25,29 @@ emergency_agent = EmergencyAgent(monitor)
 coordinator = CoordinatorAgent(doctors, database, notifier)
 
 
+print("\n" + "="*50)
+print("*** STARTING HOSPITAL MULTI-AGENT SIMULATION ***")
+print("="*50 + "\n")
+
 # Simulation Loop
-for i in range(3):
+for i in range(5):
+    print(f"\n--- Simulation Cycle {i+1} ---")
 
-    patient, severity = emergency_agent.perceive()
+    # 1. Perception
+    patient, severity, detection_time = emergency_agent.perceive()
+    time.sleep(1) # Add slight delay for realistic output
 
-    coordinator.decide_and_act(patient, severity)
+    # 2. Coordination & Action
+    coordinator.decide_and_act(patient, severity, detection_time)
+    
+    # 3. Simulate passage of time and doctor releases
+    time.sleep(1)
+    for doc in doctors:
+        if not doc.available:
+            # 50% chance a busy doctor finishes their case each cycle
+            if random.random() > 0.5:
+                doc.release()
 
-
-database.display_records()
+# Display Final Report
+database.generate_report()
+print("Simulation Complete.")
